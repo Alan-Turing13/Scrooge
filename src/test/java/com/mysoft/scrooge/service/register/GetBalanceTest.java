@@ -1,14 +1,7 @@
 package com.mysoft.scrooge.service.register;
 
 import com.mysoft.scrooge.model.Register;
-import com.mysoft.scrooge.persistence.RegisterRepository;
-import com.mysoft.scrooge.service.RegisterService;
-import com.mysoft.scrooge.service.RegisterServiceImpl;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -17,18 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 
-public class GetBalanceTest {
-
-    private RegisterService registerService;
-
-    @Mock
-    private RegisterRepository registerRepository;
-
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-        registerService = new RegisterServiceImpl(registerRepository);
-    }
+public class GetBalanceTest extends RegisterTestBase {
 
     @Test
     public void givenNoRegisters_WhenBalanceIsQueried_NothingIsReturned() {
