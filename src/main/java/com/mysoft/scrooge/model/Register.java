@@ -17,7 +17,8 @@ public class Register {
 
     protected Register() {}
 
-    public Register(String displayName) {
+    public Register(long id, String displayName) {
+        this.id = id;
         this.displayName = displayName;
     }
 

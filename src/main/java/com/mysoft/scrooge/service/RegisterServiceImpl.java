@@ -5,6 +5,7 @@ import com.mysoft.scrooge.persistence.RegisterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +33,17 @@ public class RegisterServiceImpl implements RegisterService {
         List<Register> allRegisters = new ArrayList<>();
         iterable.forEach(allRegisters::add);
         return allRegisters;
+    }
+
+    @Override
+    public void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException {
+        Register register = registerRepo.findById(registerId).orElseThrow(() -> registerNotFound(registerId));
+        BigDecimal newAmount = register.getBalance().add(amount);
+        register.setBalance(newAmount);
+        registerRepo.save(register);
+    }
+
+    private RegisterNotFoundException registerNotFound(long registerId) {
+        return new RegisterNotFoundException(registerId);
     }
 }

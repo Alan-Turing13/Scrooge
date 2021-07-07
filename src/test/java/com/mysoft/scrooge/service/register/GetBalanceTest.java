@@ -23,13 +23,14 @@ public class GetBalanceTest extends RegisterTestBase {
     @Test
     public void givenSingleRegister_WhenBalanceIsQueried_TheRegisterIsReturned() {
 
-        var theRegister = new Register("Test register");
+        var theRegister = new Register(1,"Test register");
         theRegister.setBalance(BigDecimal.valueOf(42));
 
         doReturn(List.of(theRegister)).when(registerRepository).findAll();
         var registers = registerService.getBalance();
 
         assertEquals(1, registers.size());
+        assertEquals(1, registers.get(0).getId());
         assertEquals("Test register", registers.get(0).getDisplayName());
         assertEquals(BigDecimal.valueOf(42),  registers.get(0).getBalance());
     }
