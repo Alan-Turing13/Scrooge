@@ -19,11 +19,6 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerRepo = registerRepo;
     }
 
-    @Override
-    public String ping() {
-        return "PONG!";
-    }
-
     /*
     TODO: specify ordering of returned registers
      */
