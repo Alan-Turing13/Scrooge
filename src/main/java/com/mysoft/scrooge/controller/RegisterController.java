@@ -6,10 +6,8 @@ import com.mysoft.scrooge.service.RegisterNotFoundException;
 import com.mysoft.scrooge.service.RegisterService;
 import com.mysoft.scrooge.service.dto.RegisterBalanceDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
@@ -45,5 +43,15 @@ public class RegisterController {
     @RequestMapping(method = RequestMethod.POST, value = "/api/register/transfer/{sourceId}/{targetId}")
     public void transfer(@PathVariable long sourceId, long targetId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException, InvalidMonetaryValueException {
         registerService.transfer(sourceId, targetId, amount);
+    }
+
+    @ResponseStatus(value=HttpStatus.BAD_REQUEST, reason="Invalid operation")
+    @ExceptionHandler({InvalidRegisterOperationException.class, InvalidMonetaryValueException.class})
+    public void badRequest() {
+    }
+
+    @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="Register not found")
+    @ExceptionHandler({RegisterNotFoundException.class})
+    public void notFound() {
     }
 }
