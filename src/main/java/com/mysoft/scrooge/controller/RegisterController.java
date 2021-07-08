@@ -1,13 +1,16 @@
 package com.mysoft.scrooge.controller;
 
+import com.mysoft.scrooge.service.RegisterNotFoundException;
 import com.mysoft.scrooge.service.RegisterService;
 import com.mysoft.scrooge.service.dto.RegisterBalanceDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.modelmapper.ModelMapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +36,11 @@ public class RegisterController {
     public List<RegisterBalanceDto> getBalance() {
         var registers = registerService.getBalance();
         return registers.stream().map(r -> modelMapper.map(r, RegisterBalanceDto.class)).collect(Collectors.toList());
+    }
+
+    //TODO: consider some return value (new balance?)
+    @RequestMapping(method = RequestMethod.POST, value = "/api/register/{id}/recharge")
+    public void recharge(@PathVariable long id, BigDecimal amount) throws RegisterNotFoundException {
+        registerService.recharge(id, amount);
     }
 }
