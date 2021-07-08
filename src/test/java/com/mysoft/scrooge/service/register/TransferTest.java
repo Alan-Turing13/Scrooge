@@ -52,9 +52,26 @@ public class TransferTest extends RegisterTestBase {
         verify(registerRepository, never()).save(any());
         verify(registerRepository, never()).saveAll(any());
     }
+
+    @Test
+    public void givenTwoRegisters_WhenSourceGoesBelowZero_ThenExceptionIsThrown() {
+
+        Register sourceRegister = new Register(1L, "Source");
+        sourceRegister.setBalance(BigDecimal.valueOf(13));
+        Register destinationRegister = new Register(2L, "Destination");
+
+        doReturn(Optional.of(sourceRegister)).when(registerRepository).findById(1L);
+        doReturn(Optional.of(destinationRegister)).when(registerRepository).findById(2L);
+
+        assertThrows(InvalidRegisterOperationException.class, () ->
+                registerService.transfer(1L, 2L, BigDecimal.valueOf(42))
+        );
+
+        verify(registerRepository, never()).save(any());
+        verify(registerRepository, never()).saveAll(any());
+    }
+
     //TODO: test for invalid monetary value
-    //TODO: test for zero tranfer
-    //TODO: test for negative transfer
 
     private boolean assertRegs(Iterable<Register> actual, BigDecimal sourceBalance, BigDecimal destinationBalance) {
         List<Register> actualList = iterableToList(actual);

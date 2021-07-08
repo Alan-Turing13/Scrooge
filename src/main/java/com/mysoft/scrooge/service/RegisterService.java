@@ -10,5 +10,5 @@ public interface RegisterService {
     String ping();
     List<Register> getBalance();
     void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException, InvalidMonetaryValueException;
-    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException, InvalidMonetaryValueException;
+    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException, InvalidMonetaryValueException, InvalidRegisterOperationException;
 }
