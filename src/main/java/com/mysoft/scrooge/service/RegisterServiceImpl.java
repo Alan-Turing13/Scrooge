@@ -36,8 +36,13 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException {
+    public void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException {
         Register register = registerRepo.findById(registerId).orElseThrow(() -> registerNotFound(registerId));
+
+        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidRegisterOperationException(registerId, "Recharged value has to be greater than 0");
+        }
+
         BigDecimal newAmount = register.getBalance().add(amount);
         register.setBalance(newAmount);
         registerRepo.save(register);

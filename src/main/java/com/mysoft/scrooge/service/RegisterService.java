@@ -9,5 +9,5 @@ public interface RegisterService {
 
     String ping();
     List<Register> getBalance();
-    void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException;
+    void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException;
 }
