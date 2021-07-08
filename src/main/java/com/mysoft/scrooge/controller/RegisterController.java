@@ -1,5 +1,6 @@
 package com.mysoft.scrooge.controller;
 
+import com.mysoft.scrooge.service.InvalidMonetaryValueException;
 import com.mysoft.scrooge.service.InvalidRegisterOperationException;
 import com.mysoft.scrooge.service.RegisterNotFoundException;
 import com.mysoft.scrooge.service.RegisterService;
@@ -41,7 +42,7 @@ public class RegisterController {
 
     //TODO: consider some return value (new balance?)
     @RequestMapping(method = RequestMethod.POST, value = "/api/register/{id}/recharge")
-    public void recharge(@PathVariable long id, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException {
+    public void recharge(@PathVariable long id, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException, InvalidMonetaryValueException {
         registerService.recharge(id, amount);
     }
 }

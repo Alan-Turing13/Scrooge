@@ -1,6 +1,7 @@
 package com.mysoft.scrooge.service.register;
 
 import com.mysoft.scrooge.model.Register;
+import com.mysoft.scrooge.service.InvalidMonetaryValueException;
 import com.mysoft.scrooge.service.InvalidRegisterOperationException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +56,7 @@ public class RechargeRegisterTest extends RegisterTestBase {
         theRegister.setBalance(BigDecimal.valueOf(7));
         doReturn(Optional.of(theRegister)).when(registerRepository).findById(1L);
 
-        assertThrows(InvalidRegisterOperationException.class, () ->
+        assertThrows(InvalidMonetaryValueException.class, () ->
                 registerService.recharge(1L, BigDecimal.valueOf(0))
         );
 
@@ -69,7 +70,7 @@ public class RechargeRegisterTest extends RegisterTestBase {
         theRegister.setBalance(BigDecimal.valueOf(7));
         doReturn(Optional.of(theRegister)).when(registerRepository).findById(1L);
 
-        assertThrows(InvalidRegisterOperationException.class, () ->
+        assertThrows(InvalidMonetaryValueException.class, () ->
                 registerService.recharge(1L, BigDecimal.valueOf(-3))
         );
 
@@ -83,7 +84,7 @@ public class RechargeRegisterTest extends RegisterTestBase {
         theRegister.setBalance(BigDecimal.valueOf(7));
         doReturn(Optional.of(theRegister)).when(registerRepository).findById(1L);
 
-        assertThrows(InvalidRegisterOperationException.class, () ->
+        assertThrows(InvalidMonetaryValueException.class, () ->
                 registerService.recharge(1L, new BigDecimal("13.213"))
         );
 
