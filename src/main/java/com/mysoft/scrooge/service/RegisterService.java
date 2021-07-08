@@ -10,4 +10,5 @@ public interface RegisterService {
     String ping();
     List<Register> getBalance();
     void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException;
+    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException;
 }

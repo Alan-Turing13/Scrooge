@@ -55,6 +55,21 @@ public class RegisterServiceImpl implements RegisterService {
         registerRepo.save(register);
     }
 
+    @Override
+    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException {
+
+        Register sourceRegister = registerRepo.findById(sourceRegisterId).orElseThrow(() -> registerNotFound(sourceRegisterId));
+        Register destinationRegister = registerRepo.findById(destinationRegisterId).orElseThrow(() -> registerNotFound(destinationRegisterId));
+
+        BigDecimal reducedAmount = sourceRegister.getBalance().subtract(amount);
+        BigDecimal increasedAmount = destinationRegister.getBalance().add(amount);
+
+        sourceRegister.setBalance(reducedAmount);
+        destinationRegister.setBalance(increasedAmount);
+
+        registerRepo.saveAll(List.of(sourceRegister, destinationRegister));
+    }
+
     private RegisterNotFoundException registerNotFound(long registerId) {
         return new RegisterNotFoundException(registerId);
     }

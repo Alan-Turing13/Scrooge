@@ -9,7 +9,7 @@ public class RegisterNotFoundException extends Exception {
     }
 
     public RegisterNotFoundException(long registerId) {
-        this(registerId, String.format("Register id=%d does not exist"));
+        this(registerId, String.format("Register id=%d does not exist", registerId));
     }
 
     public long getRegisterId() {
