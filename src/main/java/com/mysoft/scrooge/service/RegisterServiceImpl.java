@@ -36,17 +36,11 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException {
+    public void recharge(long registerId, BigDecimal amount) throws RegisterNotFoundException, InvalidMonetaryValueException {
 
         amount = amount.stripTrailingZeros();
 
-        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new InvalidRegisterOperationException(registerId, "Recharged value has to be greater than 0");
-        }
-
-        if(amount.scale() > 2) {
-            throw new InvalidRegisterOperationException(registerId, String.format("Invalid monetary value: %s", amount));
-        }
+        validateAmount(amount);
 
         Register register = registerRepo.findById(registerId).orElseThrow(() -> registerNotFound(registerId));
 
@@ -55,8 +49,21 @@ public class RegisterServiceImpl implements RegisterService {
         registerRepo.save(register);
     }
 
+    private void validateAmount(BigDecimal amount) throws InvalidMonetaryValueException {
+        if(amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidMonetaryValueException(amount, "Operation amount has to be greater than 0");
+        }
+
+        if(amount.scale() > 2) {
+            throw new InvalidMonetaryValueException(amount, String.format("Invalid monetary value: %s", amount));
+        }
+    }
+
     @Override
-    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException {
+    public void transfer(long sourceRegisterId, long destinationRegisterId, BigDecimal amount) throws RegisterNotFoundException, InvalidMonetaryValueException {
+
+        amount = amount.stripTrailingZeros();
+        validateAmount(amount);
 
         Register sourceRegister = registerRepo.findById(sourceRegisterId).orElseThrow(() -> registerNotFound(sourceRegisterId));
         Register destinationRegister = registerRepo.findById(destinationRegisterId).orElseThrow(() -> registerNotFound(destinationRegisterId));
