@@ -29,11 +29,6 @@ public class RegisterController {
         this.registerService = registerService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/ping")
-    public String ping() {
-        return registerService.ping();
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/api/register/get_balance")
     public List<RegisterBalanceDto> getBalance() {
         var registers = registerService.getBalance();
