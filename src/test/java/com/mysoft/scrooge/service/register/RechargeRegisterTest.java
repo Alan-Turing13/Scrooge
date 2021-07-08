@@ -31,19 +31,19 @@ public class RechargeRegisterTest extends RegisterTestBase {
     }
 
     @Test
-    public void givenARegisterWith7_WhenRechargedWith13_ThenBalanceOf20IsPersisted() {
+    public void givenARegisterWith7_WhenRechargedWith13pt350_ThenBalanceOf20pt25IsPersisted() {
 
         var theRegister = new Register(1,"Test register");
         theRegister.setBalance(BigDecimal.valueOf(7));
         doReturn(Optional.of(theRegister)).when(registerRepository).findById(1L);
 
         assertDoesNotThrow( () ->
-                registerService.recharge(1L, BigDecimal.valueOf(13))
+                registerService.recharge(1L, new BigDecimal("13.350"))
         );
 
         verify(registerRepository).save(argThat(reg -> {
             assertEquals(1L, reg.getId());
-            assertEquals(BigDecimal.valueOf(20), reg.getBalance());
+            assertEquals(new BigDecimal("20.35"), reg.getBalance());
             return true;
         }));
     }
@@ -71,6 +71,20 @@ public class RechargeRegisterTest extends RegisterTestBase {
 
         assertThrows(InvalidRegisterOperationException.class, () ->
                 registerService.recharge(1L, BigDecimal.valueOf(-3))
+        );
+
+        verify(registerRepository, never()).save(any());
+    }
+
+    @Test
+    public void givenARegister_WhenRechargedWithInvalidMonetaryAmount_ThenExceptionIsThrown() {
+
+        var theRegister = new Register(1,"Test register");
+        theRegister.setBalance(BigDecimal.valueOf(7));
+        doReturn(Optional.of(theRegister)).when(registerRepository).findById(1L);
+
+        assertThrows(InvalidRegisterOperationException.class, () ->
+                registerService.recharge(1L, new BigDecimal("13.213"))
         );
 
         verify(registerRepository, never()).save(any());
