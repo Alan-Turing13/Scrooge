@@ -40,4 +40,10 @@ public class RegisterController {
     public void recharge(@PathVariable long id, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException, InvalidMonetaryValueException {
         registerService.recharge(id, amount);
     }
+
+    //TODO: consider some return value (updated balances?)
+    @RequestMapping(method = RequestMethod.POST, value = "/api/register/transfer/{sourceId}/{targetId}")
+    public void transfer(@PathVariable long sourceId, long targetId, BigDecimal amount) throws RegisterNotFoundException, InvalidRegisterOperationException, InvalidMonetaryValueException {
+        registerService.transfer(sourceId, targetId, amount);
+    }
 }
